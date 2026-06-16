@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>18th Birthday Surprise</title>
     
-    <!-- Added Google Fonts for better design -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -190,6 +189,14 @@
             line-height: 1.2;
             font-weight: 700;
         }
+    
+        .video-polaroid video {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+            border-radius: 5px;
+        }
 
         .polaroid:hover {
             transform: scale(1.1) rotate(0deg) translateY(-10px) !important;
@@ -247,20 +254,17 @@
 </head>
 <body>
 
-    <!-- Landing Screen -->
     <div class="container" id="landing-card">
         <h1 id="title-text">A Special Moment Awaits...</h1>
         <p id="desc-text">There is a hidden surprise locked away behind this button. Are you ready?</p>
         <button onclick="revealSurprise()" id="action-btn">Unlock Surprise</button>
     </div>
     
-    <!-- Surprise Content -->
     <div id="surprise-content">
         <div class="container" style="margin-top: 5vh; background: transparent; border: none; box-shadow: none; padding-bottom: 10px;">
             <h1 class="surprise-title">Happy 18th Birthday!</h1>
         </div>
 
-        <!-- Motivational Speech for her Educ Course -->
         <div class="speech-card">
             <h2>To the Future Educator...</h2>
             <p>Welcome to 18! As you step into this vibrant new chapter and embark on your journey in the Education course, never forget how destined for greatness you are. It takes a truly special kind of heart to teach, inspire, and mold the minds of the future—and you possess that beautiful, kind, and patient heart effortlessly. Your brilliance shines just as bright as your gorgeous smile. Embrace every challenge in your studies, because you are going to be an absolutely incredible teacher. Continue to grow, continue to be your amazing self, and never forget how deeply loved and truly stunning you are inside and out.</p>
@@ -268,58 +272,62 @@
         
         <div class="gallery" id="photo-gallery">
             
-            <!-- Images with individual captions -->
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="1.jpg" alt="Memory 1">
                 <p class="polaroid-caption">Absolutely stunning</p>
             </div>
             
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="2.jpg" alt="Memory 2">
                 <p class="polaroid-caption">A smile that lights up the room</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="3.jpg" alt="Memory 3">
                 <p class="polaroid-caption">Effortlessly beautiful</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="4.jpg" alt="Memory 4">
                 <p class="polaroid-caption">Elegance in every way</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="5.jpg" alt="Memory 5">
                 <p class="polaroid-caption">My favorite view</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="7.jpg" alt="Memory 7">
                 <p class="polaroid-caption">Radiant as always</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="9.jpg" alt="Memory 9">
                 <p class="polaroid-caption">An angel on earth</p>
             </div>
             
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
                 <img src="10.jpg" alt="Memory 10">
                 <p class="polaroid-caption">Breathtakingly beautiful</p>
             </div>
 
-            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src)">
-                <img src="11.jpg" alt="Memory 11">
+            <div class="polaroid" onclick="openLightbox(this.querySelector('img').src, 'img')">
+                <img src="11.png" alt="Memory 11">
                 <p class="polaroid-caption">The most special girl</p>
             </div>
-            
+
+            <div class="polaroid video-polaroid" onclick="openLightbox(this.querySelector('video').src, 'video')">
+                <video src="vid.mp4"></video>
+                <p class="polaroid-caption">A Beautiful Moment Captured</p>
+            </div>
+        
         </div>
     </div>
 
-    <!-- Lightbox for interactive viewing -->
-    <div id="lightbox" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt="Enlarged memory">
+    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Enlarged memory" style="display:none;">
+        <video id="lightbox-video" controls style="display:none; max-width:90%; max-height:90%;"></video>
     </div>
 
     <script>
@@ -357,17 +365,39 @@
             });
         }
 
-        function openLightbox(src) {
+        function openLightbox(src, type) {
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxVideo = document.getElementById('lightbox-video');
             
-            lightboxImg.src = src;
+            if (type === 'video') {
+                lightboxImg.style.display = 'none';
+                lightboxVideo.style.display = 'block';
+                lightboxVideo.src = src;
+                lightboxVideo.play(); // Auto-play when opened
+            } else {
+                lightboxVideo.style.display = 'none';
+                lightboxVideo.pause(); // Ensure video is stopped
+                lightboxImg.style.display = 'block';
+                lightboxImg.src = src;
+            }
+
             lightbox.classList.add('active');
         }
 
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
+            const lightboxVideo = document.getElementById('lightbox-video');
+            
             lightbox.classList.remove('active');
+            
+            // Pause the video immediately so you don't hear audio after closing
+            lightboxVideo.pause(); 
+            
+            // Clear the src after the fade animation finishes to fully reset it
+            setTimeout(() => { 
+                lightboxVideo.src = ""; 
+            }, 300);
         }
 
         function createConfetti() {
